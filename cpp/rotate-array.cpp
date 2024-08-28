@@ -4,18 +4,12 @@ class Solution {
 public:
     void rotate(std::vector<int>& nums, int k)
     {
-        int size = nums.size();
-        auto new_index = [k, size](int i) { return (i + k) % size; };
-        std::vector<int> tail(nums.end() - k, nums.end());
-        for (int i = size - 1; i >= 0; i--) {
-            // nums[new_index(i)] = nums[i];
-            if (i < k) {
-                nums[i] = tail[i];
-                continue;
-            }
-
-            nums[i] = nums[i - k];
-        }
+        int actual_k = k % nums.size();
+        if (actual_k == nums.size()) return;
+        std::vector<int> overflow(actual_k);
+        std::copy(nums.end() - actual_k, nums.end(), overflow.begin());
+        std::copy_backward(nums.begin(), nums.end() - actual_k, nums.end());
+        std::copy(overflow.begin(), overflow.end(), nums.begin());
     }
 };
 //[5,6,7,1,2,3,4]
